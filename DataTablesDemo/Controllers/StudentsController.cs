@@ -18,11 +18,19 @@ namespace DataTablesDemo.Controllers
         [HttpPost]
         public IActionResult GetStudents()
         {
-            var students = _context.Students.ToList();
+            var pageSize = int.Parse(Request.Form["length"]);
+            var skip = int.Parse(Request.Form["start"]);
+            var searchValue = Request.Form["search[value]"];
 
-            var recordsTotal = students.Count;
+            IQueryable<Student> students = _context.Students.Where(s => string.IsNullOrEmpty(searchValue)
+                ? true
+                : (s.FirstName.Contains(searchValue) || s.LastName.Contains(searchValue) || s.Email.Contains(searchValue)));
 
-            var jsonData = new { recordsFilter = recordsTotal, recordsTotal, data = students };
+            var data = students.Skip(skip).Take(pageSize).ToList();
+
+            var recordsTotal = students.Count();
+
+            var jsonData = new { recordsFilter = recordsTotal, recordsTotal, data };
 
             return Ok(jsonData);
         }
