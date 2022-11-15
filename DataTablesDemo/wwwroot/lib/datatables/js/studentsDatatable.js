@@ -17,14 +17,24 @@
             { "data": "firstName", "name": "FirstName", "autowidth": true},
             { "data": "lastName", "name": "LastName", "autowidth": true},
             { "data": "email", "name": "Email", "autowidth": true },
-            { "data": "dateOfBirth", "name": "DateOfBirth", "autowidth": true },
             {
                 "render": function (data, type, row)
                 {
-                    return '<a href="#" class="btn btn-danger" onclick=DeleteCustomer("' + row.id + '"); > Delete </a>'
+                    return '<span>' + row.dateOfBirth.split('T')[0] + '</span>'
+                },
+                "name": "DateOfBirth"
+            },
+            {
+                "render": function (data, type, row)
+                {
+                    return `<a href="#" class="btn btn-danger" onclick=DeleteCustomer("' + row.id + '"); > Delete </a>`
                 },
                 "orderable": false
             }            
-            ]
+        ]
     });
 });
+
+function DeleteCustomer() {
+    alert('DELETED!')
+}
